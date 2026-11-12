@@ -1,0 +1,54 @@
+CREATE DATABASE Dorm_management;
+
+USE Dorm_management;
+
+CREATE TABLE Dorm (
+    DormName CHAR(1) PRIMARY KEY,
+    Location VARCHAR(100) NOT NULL,
+    Capacity SMALLINT NOT NULL,
+    ContactNumber CHAR(10) NOT NULL
+);
+
+CREATE TABLE Room (
+    RoomCode CHAR(4) PRIMARY KEY,
+    DormName CHAR(1) NOT NULL,
+    Capacity INT NOT NULL,
+    Floor INT NOT NULL,
+    RoomType VARCHAR(10) NOT NULL,
+    FOREIGN KEY (DormName) REFERENCES Dorm(DormName) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    RoomCode CHAR(4) NULL,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Gender VARCHAR(10) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    FOREIGN KEY (RoomCode) REFERENCES Room(RoomCode) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE Facility (
+    FacilityCode VARCHAR(20) PRIMARY KEY,
+    DormName CHAR(1) NOT NULL,
+    FacilityName VARCHAR(20) NOT NULL,
+    Type VARCHAR(20) NOT NULL,
+    FOREIGN KEY (DormName) REFERENCES Dorm(DormName) ON DELETE NO ACTION ON UPDATE CASCADE
+);
+
+CREATE TABLE Staff (
+    StaffID INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Role VARCHAR(20) NOT NULL,
+    Email VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE StaffDormAssignment (
+    StaffID INT NOT NULL,
+    DormName CHAR(1) NOT NULL,
+    PRIMARY KEY (StaffID, DormName),
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (DormName) REFERENCES Dorm(DormName) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
